@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PDA — Pushdown Automata</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<!-- ══════════════════════════════
+  SECTION 1 — INTRO
+══════════════════════════════ -->
+<section id="intro">
+
+  <!-- Scanline overlay -->
+  <div class="scanlines" aria-hidden="true"></div>
+
+  <!-- Nav -->
+  <nav class="nav">
+    <div class="nav-left">
+      <span class="nav-logo">PDA</span>
+    </div>
+    <div class="nav-right">
+      <a href="#simulator" class="nav-cta">SIMULATOR ↓</a>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <div class="hero">
+    <div class="hero-meta">
+      <span class="hero-tag">THEORY OF COMPUTATION</span>
+      <span class="hero-tag">TYPE-2 LANGUAGE</span>
+      <span class="hero-tag">CONTEXT-FREE</span>
+    </div>
+    <h1 class="hero-title">
+      <span class="hero-title-line">PUSH</span>
+      <span class="hero-title-line accent-line">DOWN</span>
+      <span class="hero-title-line">AUTO<em>MATA</em></span>
+    </h1>
+    <p class="hero-sub">A finite automaton augmented with an infinite stack — the machine that powers parsers, compilers, and the recognition of context-free languages.</p>
+    <a href="#simulator" class="hero-btn">
+      <span class="btn-bracket">[</span>
+      OPEN SIMULATOR
+      <span class="btn-bracket">]</span>
+    </a>
+  </div>
+
+  <!-- Decorative ticker -->
+  <div class="ticker" aria-hidden="true">
+    <div class="ticker-inner">
+      <span>PUSH &nbsp;·&nbsp; POP &nbsp;·&nbsp; REPLACE &nbsp;·&nbsp; CONTEXT-FREE &nbsp;·&nbsp; STACK &nbsp;·&nbsp; TRANSITION &nbsp;·&nbsp; STATE &nbsp;·&nbsp; ACCEPT &nbsp;·&nbsp; REJECT &nbsp;·&nbsp;</span>
+      <span>PUSH &nbsp;·&nbsp; POP &nbsp;·&nbsp; REPLACE &nbsp;·&nbsp; CONTEXT-FREE &nbsp;·&nbsp; STACK &nbsp;·&nbsp; TRANSITION &nbsp;·&nbsp; STATE &nbsp;·&nbsp; ACCEPT &nbsp;·&nbsp; REJECT &nbsp;·&nbsp;</span>
+    </div>
+  </div>
+
+  <!-- ── HORIZONTAL SCROLL STRIP ── -->
+  <div class="strip-outer">
+    <div class="strip-label">
+      <span>SCROLL →</span>
+    </div>
+
+    <div class="strip" id="infoStrip">
+
+      <!-- CARD 01 -->
+      <div class="sc">
+        <div class="sc-num">01</div>
+        <div class="sc-title">What is a PDA?</div>
+        <div class="sc-body">
+          <p>A <b>Pushdown Automaton</b> extends a finite automaton (FA) with an auxiliary <b>stack</b>. While an FA can only remember its current state, a PDA can push and pop symbols, giving it power to recognise <b>context-free languages (CFLs)</b>.</p>
+          <p>Every regular language is also a CFL, but not vice versa. The canonical example is <code>aⁿbⁿ</code> — a PDA pushes one symbol per 'a' and pops per 'b', accepting when the stack empties.</p>
+        </div>
+      </div>
+
+      <!-- CARD 02 -->
+      <div class="sc">
+        <div class="sc-num">02</div>
+        <div class="sc-title">Why It Matters</div>
+        <div class="sc-body">
+          <ul class="sc-list">
+            <li><b>Compilers &amp; Parsers</b> — context-free grammars describe most programming languages; your compiler's parser is a PDA.</li>
+            <li><b>XML / HTML</b> — matching opening &amp; closing tags is a classic stack problem.</li>
+            <li><b>Natural Language</b> — sentence structure follows context-free rules.</li>
+            <li><b>Formal Verification</b> — PDAs underpin many model-checking tools.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- CARD 03 -->
+      <div class="sc">
+        <div class="sc-num">03</div>
+        <div class="sc-title">PDA vs Finite Automaton</div>
+        <div class="sc-body">
+          <table class="sc-table">
+            <thead><tr><th>Feature</th><th>FA</th><th>PDA</th></tr></thead>
+            <tbody>
+              <tr><td>Memory</td><td>State only</td><td>State + Stack</td></tr>
+              <tr><td>Languages</td><td>Regular</td><td>Context-free</td></tr>
+              <tr><td>Stack ops</td><td>None</td><td>Push / Pop</td></tr>
+              <tr><td>Determinism</td><td>Always</td><td>D or ND</td></tr>
+              <tr><td>Chomsky</td><td>Type 3</td><td>Type 2</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- CARD 04 -->
+      <div class="sc">
+        <div class="sc-num">04</div>
+        <div class="sc-title">Formal Definition</div>
+        <div class="sc-body">
+          <div class="sc-tuple">M = (Q, Σ, Γ, δ, q₀, Z₀, F)</div>
+          <dl class="sc-dl">
+            <dt>Q</dt><dd>Finite set of states</dd>
+            <dt>Σ</dt><dd>Input alphabet</dd>
+            <dt>Γ</dt><dd>Stack alphabet</dd>
+            <dt>δ</dt><dd>Q × (Σ∪{ε}) × Γ → 2^(Q×Γ*)</dd>
+            <dt>q₀</dt><dd>Start state</dd>
+            <dt>Z₀</dt><dd>Initial stack symbol</dd>
+            <dt>F</dt><dd>Accept states (F ⊆ Q)</dd>
+          </dl>
+        </div>
+      </div>
+
+      <!-- CARD 05 -->
+      <div class="sc">
+        <div class="sc-num">05</div>
+        <div class="sc-title">Transition Notation</div>
+        <div class="sc-body">
+          <div class="sc-notation">(q, a, A) → (p, γ)</div>
+          <dl class="sc-dl">
+            <dt>q</dt><dd>Current state</dd>
+            <dt>a</dt><dd>Input symbol read (ε = none)</dd>
+            <dt>A</dt><dd>Stack top — always popped</dd>
+            <dt>p</dt><dd>Next state</dd>
+            <dt>γ</dt><dd>String pushed onto stack (ε = pop only)</dd>
+          </dl>
+          <p class="sc-note">Stack written top-first. Pushing <code>AB</code> puts A on top of B.</p>
+        </div>
+      </div>
+
+      <!-- CARD 06 -->
+      <div class="sc">
+        <div class="sc-num">06</div>
+        <div class="sc-title">Acceptance Modes</div>
+        <div class="sc-body">
+          <div class="mode-item mode-f">
+            <div class="mode-lbl">FINAL STATE</div>
+            <p>Accept when an <b>accept state</b> is reached after consuming all input. Stack contents irrelevant.</p>
+          </div>
+          <div class="mode-item mode-e">
+            <div class="mode-lbl">EMPTY STACK</div>
+            <p>Accept when the <b>stack empties</b> after all input is consumed. State is irrelevant.</p>
+          </div>
+          <p class="sc-note">Both modes are equivalent in power — any language recognisable by one is recognisable by the other.</p>
+        </div>
+      </div>
+
+      <!-- CARD 07 -->
+      <div class="sc">
+        <div class="sc-num">07</div>
+        <div class="sc-title">Stack Operations</div>
+        <div class="sc-body">
+          <div class="ops-row">
+            <div class="op-b op-push">
+              <div class="op-icon">↓</div>
+              <div class="op-name">PUSH</div>
+              <p>Pop top, push ≥2 symbols. Stack grows.</p>
+            </div>
+            <div class="op-b op-pop">
+              <div class="op-icon">↑</div>
+              <div class="op-name">POP</div>
+              <p>Pop top, push nothing. Stack shrinks.</p>
+            </div>
+            <div class="op-b op-rep">
+              <div class="op-icon">⇄</div>
+              <div class="op-name">REPLACE</div>
+              <p>Pop top, push 1 symbol. Height unchanged.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CARD 08 -->
+      <div class="sc">
+        <div class="sc-num">08</div>
+        <div class="sc-title">Determinism</div>
+        <div class="sc-body">
+          <p>A PDA is <b>deterministic (DPDA)</b> if for every configuration <code>(q, a, A)</code> there is at most one applicable transition.</p>
+          <p>It is <b>nondeterministic (NPDA)</b> if multiple transitions may apply simultaneously.</p>
+          <div class="det-note">Unlike finite automata, <b>DPDAs are strictly weaker than NPDAs</b>. Palindromes require nondeterminism. This simulator implements DPDAs only.</div>
+        </div>
+      </div>
+
+      <!-- CARD 09 -->
+      <div class="sc sc--wide">
+        <div class="sc-num">09</div>
+        <div class="sc-title">Walkthrough — aⁿbⁿ on input <code>aabb</code></div>
+        <div class="sc-body">
+          <div class="wt-strip">
+            <div class="wt-s"><span class="wt-n">1</span><code>(q0, a, Z) → (q0, AZ)</code><span class="wt-d">Read 'a', push A. Stack: <b>A Z</b></span></div>
+            <div class="wt-s"><span class="wt-n">2</span><code>(q0, a, A) → (q0, AA)</code><span class="wt-d">Read 'a', push A. Stack: <b>A A Z</b></span></div>
+            <div class="wt-s"><span class="wt-n">3</span><code>(q0, b, A) → (q1, ε)</code><span class="wt-d">Read 'b', pop A. Stack: <b>A Z</b></span></div>
+            <div class="wt-s"><span class="wt-n">4</span><code>(q1, b, A) → (q1, ε)</code><span class="wt-d">Read 'b', pop A. Stack: <b>Z</b></span></div>
+            <div class="wt-s wt-ok"><span class="wt-n wt-n-ok">5</span><code>(q1, ε, Z) → (q2, Z)</code><span class="wt-d">ε-move to accept state q2. ✓ <b>Accepted</b></span></div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /strip -->
+
+    <!-- Scroll arrows -->
+    <div class="strip-arrows">
+      <button class="sarrow" onclick="scrollStrip(-1)" aria-label="scroll left">←</button>
+      <button class="sarrow" onclick="scrollStrip(1)"  aria-label="scroll right">→</button>
+    </div>
+  </div><!-- /strip-outer -->
+
+</section>
+
+<!-- ══════════════════════════════
+  SECTION 2 — SIMULATOR
+══════════════════════════════ -->
+<section id="simulator">
+  <div class="scanlines" aria-hidden="true"></div>
+
+  <div class="sim-hd">
+    <div class="sim-hd-tag">// INTERACTIVE MODULE</div>
+    <h2 class="sim-hd-title">PDA Simulator</h2>
+    <p class="sim-hd-sub">Select a language, enter a string, step through transitions — or run the full simulation at once.</p>
+  </div>
+
+  <!-- Language selector -->
+  <div class="sim-row">
+    <label class="sim-label" for="langSelect">LANGUAGE</label>
+    <select id="langSelect" onchange="onLangChange()"></select>
+  </div>
+  <div id="langDesc" class="sim-desc"></div>
+
+  <!-- Custom PDA Editor -->
+  <div id="customEditor">
+    <div class="ced-head">// DEFINE YOUR PDA</div>
+    <div class="ced-meta">
+      <label>Start state<input type="text" id="customStart" placeholder="q0" /></label>
+      <label>Accept states<input type="text" id="customAccept" placeholder="q2, q3" /></label>
+      <label>Initial stack symbol<input type="text" id="customStackSym" value="Z" /></label>
+    </div>
+    <div class="ced-tw">
+      <table id="transTable">
+        <thead>
+          <tr><th>State</th><th>Input (ε=empty)</th><th>Stack top</th><th>Next state</th><th>Push (comma-sep, ε=pop)</th><th></th></tr>
+        </thead>
+        <tbody id="transBody"></tbody>
+      </table>
+    </div>
+    <div class="ced-acts">
+      <button onclick="addTransRow()">+ Row</button>
+      <button class="btn-s" onclick="clearCustomEditor()">Clear</button>
+      <span class="ced-sep">Load preset →</span>
+      <select id="presetSelect"><option value="">— select —</option></select>
+      <button class="btn-s" onclick="loadPresetIntoEditor(document.getElementById('presetSelect').value)">Load</button>
+    </div>
+  </div>
+
+  <!-- Input -->
+  <div class="sim-input-row">
+    <input id="inputString" type="text" placeholder="enter input string   e.g. aaabbb" autocomplete="off" spellcheck="false" />
+    <div class="sim-btns">
+      <button onclick="startSimulation()">START</button>
+      <button onclick="stepSimulation()">STEP ▶</button>
+      <button onclick="runAll()" class="btn-run">RUN ALL ⏩</button>
+      <button onclick="resetSimulation()" class="btn-reset">RESET ↺</button>
+    </div>
+  </div>
+
+  <div id="inputDisplay" class="input-display"></div>
+  <div id="stateStatus" class="state-status"></div>
+
+  <!-- Panels -->
+  <div class="panels">
+
+    <div class="panel">
+      <div class="panel-hd">// MACHINE STATE</div>
+      <div class="panel-body">
+        <div class="kv"><span class="kk">CURRENT STATE</span><span id="state" class="kv-v kv-state">—</span></div>
+        <div class="kv"><span class="kk">REMAINING INPUT</span><span id="remaining" class="kv-v kv-rem">—</span></div>
+        <div class="kk" style="margin-top:18px;margin-bottom:8px">LAST TRANSITION</div>
+        <div id="transition" class="trans-disp">—</div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-hd">// STACK</div>
+      <div class="panel-body">
+        <div class="stack-c" id="stack"></div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-hd">// EXECUTION LOG</div>
+      <div class="panel-body">
+        <div class="log-c" id="log"></div>
+      </div>
+    </div>
+
+  </div>
+
+</section>
+
+<footer class="site-footer">
+  <span>PUSHDOWN AUTOMATA SIMULATOR</span>
+  <span>·</span>
+  <span>THEORY OF COMPUTATION</span>
+</footer>
+
+<script src="script.js"></script>
+<script>
+  window.addEventListener("DOMContentLoaded", () => {
+    const ps = document.getElementById("presetSelect");
+    Object.entries(LANGUAGES).forEach(([key, lang]) => {
+      if (key === "custom") return;
+      const o = document.createElement("option");
+      o.value = key; o.textContent = lang.label;
+      ps.appendChild(o);
+    });
+  });
+
+  function scrollStrip(dir) {
+    const strip = document.getElementById("infoStrip");
+    strip.scrollBy({ left: dir * 420, behavior: "smooth" });
+  }
+</script>
+</body>
+</html>
